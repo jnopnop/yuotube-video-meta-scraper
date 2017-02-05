@@ -1,9 +1,9 @@
-package org.nop.parser.service.impl;
+package org.nop.scraper.service.impl;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.nop.parser.model.VideoMeta;
-import org.nop.parser.service.YoutubeParser;
+import org.nop.scraper.model.VideoMeta;
+import org.nop.scraper.service.YoutubeParser;
 import org.springframework.stereotype.Service;
 
 @Service

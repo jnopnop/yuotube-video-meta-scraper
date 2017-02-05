@@ -1,7 +1,7 @@
 package org.nop.web.controller;
 
-import org.nop.parser.VideoMetaRetrievalFacade;
-import org.nop.parser.model.VideoMeta;
+import org.nop.scraper.YouTubeVideoMetaScraperFacade;
+import org.nop.scraper.model.VideoMeta;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +15,7 @@ import javax.inject.Inject;
 public class MetaInformationController {
 
     @Inject
-    private VideoMetaRetrievalFacade parserFacade;
+    private YouTubeVideoMetaScraperFacade parserFacade;
 
     @RequestMapping(value = "/video/youtube/{id}/meta", method = RequestMethod.GET)
     public ResponseEntity<VideoMeta> getYoutubeVideoMeta(final @PathVariable("id") String id) {

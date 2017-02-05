@@ -1,16 +1,16 @@
-package org.nop.parser.impl;
+package org.nop.scraper.impl;
 
-import org.nop.parser.VideoMetaRetrievalFacade;
-import org.nop.parser.model.VideoMeta;
-import org.nop.parser.service.YoutubeDownloader;
-import org.nop.parser.service.YoutubeParser;
+import org.nop.scraper.YouTubeVideoMetaScraperFacade;
+import org.nop.scraper.model.VideoMeta;
+import org.nop.scraper.service.YoutubeDownloader;
+import org.nop.scraper.service.YoutubeParser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 
 @Service
-public class VideoMetaRetrievalFacadeImpl implements VideoMetaRetrievalFacade {
+public class YouTubeVideoMetaScraperFacadeImpl implements YouTubeVideoMetaScraperFacade {
 
     @Inject
     private YoutubeDownloader downloader;

@@ -1,4 +1,4 @@
-package org.nop.parser.service;
+package org.nop.scraper.service;
 
 import org.springframework.http.ResponseEntity;
 

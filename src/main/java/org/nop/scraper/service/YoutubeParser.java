@@ -1,6 +1,6 @@
-package org.nop.parser.service;
+package org.nop.scraper.service;
 
-import org.nop.parser.model.VideoMeta;
+import org.nop.scraper.model.VideoMeta;
 
 public interface YoutubeParser {
 

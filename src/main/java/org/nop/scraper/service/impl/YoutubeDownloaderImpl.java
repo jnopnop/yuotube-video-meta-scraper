@@ -1,6 +1,6 @@
-package org.nop.parser.service.impl;
+package org.nop.scraper.service.impl;
 
-import org.nop.parser.service.YoutubeDownloader;
+import org.nop.scraper.service.YoutubeDownloader;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;

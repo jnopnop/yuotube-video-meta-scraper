@@ -1,4 +1,4 @@
-package org.nop.parser.model;
+package org.nop.scraper.model;
 
 import lombok.Getter;
 import lombok.Setter;
