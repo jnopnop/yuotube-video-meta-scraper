@@ -16,7 +16,11 @@ public class YoutubeParserImpl implements YoutubeParser {
 
     private VideoMeta toVideoMeta(final Document document) {
         VideoMeta videoMeta = new VideoMeta();
-        videoMeta.setTitle(document.title());
+        videoMeta.setId(document.select("meta[itemprop=videoId]").attr("content"));
+        videoMeta.setTitle(document.select("meta[name=title]").attr("content"));
+        videoMeta.setDuration(document.select("meta[itemprop=duration]").attr("content"));
+        videoMeta.setDescription(document.select("meta[itemprop=description]").attr("content"));
+        videoMeta.setAuthor(document.select("span[itemprop=author]>link").attr("href"));
         return videoMeta;
     }
 }
