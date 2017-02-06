@@ -2,7 +2,9 @@ package org.nop.scraper.service;
 
 import org.springframework.http.ResponseEntity;
 
+import java.util.concurrent.CompletableFuture;
+
 public interface YoutubeDownloader {
 
-    ResponseEntity<String> getPage(String url);
+    CompletableFuture<ResponseEntity<String>> getPage(String url);
 }

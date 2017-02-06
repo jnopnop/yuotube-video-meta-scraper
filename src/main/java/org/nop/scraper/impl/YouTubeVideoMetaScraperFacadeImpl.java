@@ -5,10 +5,11 @@ import org.nop.scraper.model.VideoMeta;
 import org.nop.scraper.service.YoutubeDownloader;
 import org.nop.scraper.service.YoutubeParser;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class YouTubeVideoMetaScraperFacadeImpl implements YouTubeVideoMetaScraperFacade {
@@ -23,10 +24,11 @@ public class YouTubeVideoMetaScraperFacadeImpl implements YouTubeVideoMetaScrape
     private YoutubeParser parser;
 
     @Override
-    public VideoMeta getVideoMeta(final String videoId) {
+    public CompletableFuture<VideoMeta> getVideoMeta(final String videoId) {
         String youtubeUrl = getYoutubeUrl(videoId);
-        ResponseEntity<String> htmlDoc = downloader.getPage(youtubeUrl);
-        return parser.parseYoutubeResponse(htmlDoc.getBody());
+        return downloader.getPage(youtubeUrl)
+                .thenApply(HttpEntity::getBody)
+                .thenApply(parser::parseYoutubeResponse);
     }
 
     private String getYoutubeUrl(final String id) {
