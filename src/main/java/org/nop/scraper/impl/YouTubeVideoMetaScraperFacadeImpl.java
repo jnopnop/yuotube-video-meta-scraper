@@ -28,7 +28,7 @@ public class YouTubeVideoMetaScraperFacadeImpl implements YouTubeVideoMetaScrape
         String youtubeUrl = getYoutubeUrl(videoId);
         return downloader.getPage(youtubeUrl)
                 .thenApply(HttpEntity::getBody)
-                .thenApply(parser::parseYoutubeResponse);
+                .thenCompose(parser::parseYoutubeResponse);
     }
 
     private String getYoutubeUrl(final String id) {

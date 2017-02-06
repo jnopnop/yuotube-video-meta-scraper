@@ -6,21 +6,50 @@ import org.nop.scraper.model.VideoMeta;
 import org.nop.scraper.service.YoutubeParser;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.CompletableFuture;
+
 @Service
 public class YoutubeParserImpl implements YoutubeParser {
 
+    public static final String SELECTOR_ID = "meta[itemprop=videoId]";
+    public static final String SELECTOR_TITLE = "meta[name=title]";
+    public static final String SELECTOR_DURATION = "meta[itemprop=duration]";
+    public static final String SELECTOR_DESCRIPTION = "meta[itemprop=description]";
+    public static final String SELECTOR_AUTHOR = "span[itemprop=author]>link";
+
+    public static final String ATTR_CONTENT = "content";
+    public static final String ATTR_HREF = "href";
+
     @Override
-    public VideoMeta parseYoutubeResponse(final String response) {
-        return toVideoMeta(Jsoup.parse(response));
+    public CompletableFuture<VideoMeta> parseYoutubeResponse(final String response) {
+        return toVideoMetaFuture(CompletableFuture.supplyAsync(() -> Jsoup.parse(response)));
     }
 
-    private VideoMeta toVideoMeta(final Document document) {
-        VideoMeta videoMeta = new VideoMeta();
-        videoMeta.setId(document.select("meta[itemprop=videoId]").attr("content"));
-        videoMeta.setTitle(document.select("meta[name=title]").attr("content"));
-        videoMeta.setDuration(document.select("meta[itemprop=duration]").attr("content"));
-        videoMeta.setDescription(document.select("meta[itemprop=description]").attr("content"));
-        videoMeta.setAuthor(document.select("span[itemprop=author]>link").attr("href"));
-        return videoMeta;
+    private CompletableFuture<VideoMeta> toVideoMetaFuture(final CompletableFuture<Document> documentFuture) {
+        return documentFuture.thenCompose(doc -> {
+            VideoMeta videoMeta = new VideoMeta();
+
+            CompletableFuture<Void> idFuture = CompletableFuture.runAsync(() -> videoMeta
+                    .setId(parse(doc, SELECTOR_ID, ATTR_CONTENT)));
+
+            CompletableFuture<Void> titleFuture = CompletableFuture.runAsync(() -> videoMeta
+                    .setTitle(parse(doc, SELECTOR_TITLE, ATTR_CONTENT)));
+
+            CompletableFuture<Void> durationFuture = CompletableFuture.runAsync(() -> videoMeta
+                    .setDuration(parse(doc, SELECTOR_DURATION, ATTR_CONTENT)));
+
+            CompletableFuture<Void> descriptionFuture = CompletableFuture.runAsync(() -> videoMeta
+                    .setDescription(parse(doc, SELECTOR_DESCRIPTION, ATTR_CONTENT)));
+
+            CompletableFuture<Void> authorFuture = CompletableFuture.runAsync(() -> videoMeta
+                    .setAuthor(parse(doc, SELECTOR_AUTHOR, ATTR_HREF)));
+
+            return CompletableFuture.allOf(idFuture, titleFuture, durationFuture, descriptionFuture, authorFuture)
+                    .thenApply(aVoid -> videoMeta);
+        });
+    }
+
+    private String parse(final Document document, final String selector, final String attr) {
+        return document.select(selector).attr(attr);
     }
 }
