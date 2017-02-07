@@ -19,6 +19,8 @@ public class JsoupConverterImpl implements JsoupConverter {
 
     @Override
     public <T> T toModel(final Document document, final Class<T> modelClass) {
+        //TODO: Use appropriate parameter-level annotations
+        Assert.notNull(document, "Jsoup Document should not be null!");
         Assert.isTrue(modelClass.isAnnotationPresent(JsoupModel.class),
                 String.format("Target class is not annotated with %s", JsoupModel.class.getName()));
 
